@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitter Sentiment Analysis</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Twitter Sentiment Analysis</h1>
+        <div class="input-section">
+            <label for="tweet">Enter the tweet:</label>
+            <textarea id="tweet" name="tweet" rows="4" cols="50" placeholder="Enter tweet here..."></textarea><br>
+            <button id="predict-button">Predict</button>
+        </div>
+        <div id="result" class="result-section"></div>
+    </div>
+
+    <script>
+        document.getElementById('predict-button').addEventListener('click', function() {
+            const tweet = document.getElementById('tweet').value;
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({'tweet': tweet})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Sentiment: ' + data.prediction;
+            });
+        });
+    </script>
+</body>
+</html>
